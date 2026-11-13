@@ -1,0 +1,242 @@
+{
+  "entities": {
+    "SimCard": {
+      "title": "SimCard",
+      "description": "A Viettel SIM number available in the store catalog",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "phoneNumber": { "type": "string", "minLength": 10, "maxLength": 20 },
+        "rawDigits": { "type": "string", "minLength": 10, "maxLength": 12, "pattern": "^[0-9]+$" },
+        "prefix": { "type": "string", "minLength": 3, "maxLength": 4 },
+        "category": { "type": "string", "minLength": 2, "maxLength": 50 },
+        "priceTier": {
+          "type": "string",
+          "enum": ["100k-300k", "500k-1m", "1m-5m", "5m-10m", "vip-10m+"]
+        },
+        "price": { "type": "number" },
+        "status": {
+          "type": "string",
+          "enum": ["available", "reserved", "sold"]
+        },
+        "fengShuiNote": { "type": "string", "minLength": 0, "maxLength": 240 },
+        "featured": { "type": "boolean" },
+        "source": { "type": "string", "enum": ["warehouse", "viettel_api"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "phoneNumber",
+        "rawDigits",
+        "prefix",
+        "category",
+        "priceTier",
+        "price",
+        "status",
+        "fengShuiNote",
+        "featured",
+        "source",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer SIM purchase order containing PII restricted to admins",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "orderCode": { "type": "string", "minLength": 4, "maxLength": 40, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "customerName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "customerPhone": { "type": "string", "minLength": 9, "maxLength": 15 },
+        "zaloOptIn": { "type": "boolean" },
+        "shippingAddress": { "type": "string", "minLength": 3, "maxLength": 300 },
+        "simType": { "type": "string", "enum": ["physical", "esim"] },
+        "simNumbers": { "type": "array" },
+        "totalAmount": { "type": "number" },
+        "tierBreakdown": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "paymentMethod": { "type": "string", "enum": ["vnpay", "cod"] },
+        "paymentStatus": { "type": "string", "enum": ["unpaid", "paid", "failed"] },
+        "orderStatus": {
+          "type": "string",
+          "enum": ["pending", "confirmed", "shipping", "completed", "cancelled"]
+        },
+        "vnpayTxnRef": { "type": "string", "minLength": 0, "maxLength": 64 },
+        "vnpayBankCode": { "type": "string", "minLength": 0, "maxLength": 32 },
+        "zaloNotifiedCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "orderCode",
+        "customerName",
+        "customerPhone",
+        "zaloOptIn",
+        "shippingAddress",
+        "simType",
+        "simNumbers",
+        "totalAmount",
+        "tierBreakdown",
+        "paymentMethod",
+        "paymentStatus",
+        "orderStatus",
+        "vnpayTxnRef",
+        "vnpayBankCode",
+        "zaloNotifiedCount",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "OrderTracking": {
+      "title": "OrderTracking",
+      "description": "Non-PII public order tracking projection keyed by exact orderCode",
+      "type": "object",
+      "properties": {
+        "orderCode": { "type": "string", "minLength": 4, "maxLength": 40, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "maskedPhone": { "type": "string", "minLength": 4, "maxLength": 20 },
+        "simNumbers": { "type": "array" },
+        "totalAmount": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["vnpay", "cod"] },
+        "paymentStatus": { "type": "string", "enum": ["unpaid", "paid", "failed"] },
+        "orderStatus": {
+          "type": "string",
+          "enum": ["pending", "confirmed", "shipping", "completed", "cancelled"]
+        },
+        "zaloNotifiedCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "orderCode",
+        "maskedPhone",
+        "simNumbers",
+        "totalAmount",
+        "paymentMethod",
+        "paymentStatus",
+        "orderStatus",
+        "zaloNotifiedCount",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PublicCmsSettings": {
+      "title": "PublicCmsSettings",
+      "description": "Public storefront CMS configuration",
+      "type": "object",
+      "properties": {
+        "heroTitle": { "type": "string", "minLength": 3, "maxLength": 160 },
+        "heroSubtitle": { "type": "string", "minLength": 3, "maxLength": 320 },
+        "promoBanner": { "type": "string", "minLength": 0, "maxLength": 200 },
+        "seoTitle": { "type": "string", "minLength": 3, "maxLength": 120 },
+        "seoDescription": { "type": "string", "minLength": 3, "maxLength": 260 },
+        "hotline": { "type": "string", "minLength": 4, "maxLength": 30 },
+        "zaloOaId": { "type": "string", "minLength": 0, "maxLength": 64 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "heroTitle",
+        "heroSubtitle",
+        "promoBanner",
+        "seoTitle",
+        "seoDescription",
+        "hotline",
+        "zaloOaId",
+        "updatedAt"
+      ]
+    },
+    "IntegrationSettings": {
+      "title": "IntegrationSettings",
+      "description": "Admin-only API credentials for VNPAY, Zalo OA, and Viettel Stock API",
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["sandbox", "production"] },
+        "vnpayTmnCode": { "type": "string", "minLength": 0, "maxLength": 64 },
+        "vnpayHashSecret": { "type": "string", "minLength": 0, "maxLength": 128 },
+        "vnpayUrl": { "type": "string", "minLength": 0, "maxLength": 240 },
+        "zaloOaAccessToken": { "type": "string", "minLength": 0, "maxLength": 512 },
+        "zaloZnsTemplateId": { "type": "string", "minLength": 0, "maxLength": 64 },
+        "viettelApiUrl": { "type": "string", "minLength": 0, "maxLength": 240 },
+        "viettelApiKey": { "type": "string", "minLength": 0, "maxLength": 256 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "mode",
+        "vnpayTmnCode",
+        "vnpayHashSecret",
+        "vnpayUrl",
+        "zaloOaAccessToken",
+        "zaloZnsTemplateId",
+        "viettelApiUrl",
+        "viettelApiKey",
+        "updatedAt"
+      ]
+    },
+    "ZaloLog": {
+      "title": "ZaloLog",
+      "description": "Automated Zalo OA order status notification log",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "orderCode": { "type": "string", "minLength": 4, "maxLength": 40 },
+        "recipientPhone": { "type": "string", "minLength": 4, "maxLength": 20 },
+        "eventType": { "type": "string", "minLength": 2, "maxLength": 40 },
+        "messagePreview": { "type": "string", "minLength": 2, "maxLength": 500 },
+        "deliveryStatus": { "type": "string", "enum": ["sent_live", "simulated_sandbox", "failed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "orderCode",
+        "recipientPhone",
+        "eventType",
+        "messagePreview",
+        "deliveryStatus",
+        "createdAt"
+      ]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Authorized admin user record",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "minLength": 3, "maxLength": 160 },
+        "role": { "type": "string", "enum": ["super_admin", "editor"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/sims/{simId}": {
+      "schema": { "$ref": "#/entities/SimCard" },
+      "description": "Publicly readable SIM inventory managed by admins"
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Customer orders containing PII, readable and updatable only by admins"
+    },
+    "/order_tracking/{orderCode}": {
+      "schema": { "$ref": "#/entities/OrderTracking" },
+      "description": "Non-PII order status lookup keyed by exact orderCode"
+    },
+    "/cms_settings/public": {
+      "schema": { "$ref": "#/entities/PublicCmsSettings" },
+      "description": "Public storefront copy, SEO, and contact settings"
+    },
+    "/cms_settings/integrations": {
+      "schema": { "$ref": "#/entities/IntegrationSettings" },
+      "description": "Admin-only VNPAY, Zalo OA, and Viettel API credentials"
+    },
+    "/zalo_logs/{logId}": {
+      "schema": { "$ref": "#/entities/ZaloLog" },
+      "description": "Zalo OA notification audit trail"
+    },
+    "/admins/{uid}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Admin role directory for RBAC"
+    }
+  }
+}

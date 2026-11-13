@@ -1,0 +1,6 @@
+{
+  "name": "V-Sim Hub – Kho SIM Số Đẹp Viettel",
+  "description": "Website bán SIM số đẹp Viettel phân khúc từ 100k đến VIP trên 10 triệu. Tích hợp tra cứu kho số Viettel, thanh toán VNPAY, thông báo Zalo OA tự động và quản trị doanh thu thời gian thực.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

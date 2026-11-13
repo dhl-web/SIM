@@ -1,0 +1,426 @@
+import { IntegrationSettings, PublicCmsSettings, SimCard } from '../types';
+
+export const DEFAULT_PUBLIC_CMS: PublicCmsSettings = {
+  heroTitle: 'Chọn Số Đẹp Viettel Chuẩn Phong Thủy, Giao eSIM Trong 5 Phút',
+  heroSubtitle:
+    'Kho hơn 50.000+ SIM Viettel chính chủ chia theo 5 phân khúc từ 100k đến VIP trên 10 triệu. Tra cứu trực tiếp kho Viettel, thanh toán VNPAY an toàn và nhận thông báo đơn hàng qua Zalo OA.',
+  promoBanner: 'Miễn phí kích hoạt eSIM Viettel 5G toàn quốc & giảm 5% khi thanh toán qua VNPAY QR',
+  seoTitle: 'V-Sim Hub – Kho SIM Số Đẹp Viettel Chính Hãng Từ 100K Đến VIP',
+  seoDescription:
+    'Mua SIM số đẹp Viettel 098, 097, 096, 086, 03x theo phân khúc 100k-300k đến SIM VIP trên 10 triệu. Tra kho Viettel trực tiếp, thanh toán VNPAY an toàn.',
+  hotline: '1900 6868',
+  zaloOaId: 'vsimhub_viettel_oa'
+};
+
+export const DEFAULT_INTEGRATIONS: IntegrationSettings = {
+  mode: 'sandbox',
+  vnpayTmnCode: 'VSIMHUB1',
+  vnpayHashSecret: '',
+  vnpayUrl: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+  zaloOaAccessToken: '',
+  zaloZnsTemplateId: '304928_ZNS_ORDER_STATUS',
+  viettelApiUrl: '',
+  viettelApiKey: ''
+};
+
+export const INITIAL_DEMO_SIMS: SimCard[] = [
+  // 1. Phân khúc 100k - 300k (6 số tiêu biểu)
+  {
+    id: 'sim_0386245189',
+    phoneNumber: '0386.245.189',
+    rawDigits: '0386245189',
+    prefix: '038',
+    category: 'Phổ thông',
+    priceTier: '100k-300k',
+    price: 150000,
+    status: 'available',
+    fengShuiNote: 'Số cân bằng ngũ hành, phù hợp dùng làm SIM phụ hoặc liên lạc công việc',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0394512268',
+    phoneNumber: '0394.512.268',
+    rawDigits: '0394512268',
+    prefix: '039',
+    category: 'Lộc phát',
+    priceTier: '100k-300k',
+    price: 250000,
+    status: 'available',
+    fengShuiNote: 'Đuôi 268 Mãi Lộc Phát giá tiết kiệm cho sinh viên và nhân viên văn phòng',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0368190379',
+    phoneNumber: '0368.190.379',
+    rawDigits: '0368190379',
+    prefix: '036',
+    category: 'Thần tài',
+    priceTier: '100k-300k',
+    price: 290000,
+    status: 'available',
+    fengShuiNote: 'Đuôi 379 Ông Thần Tài nhỏ - đại diện cho sự khởi đầu thuận lợi',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0352814168',
+    phoneNumber: '0352.814.168',
+    rawDigits: '0352814168',
+    prefix: '035',
+    category: 'Lộc phát',
+    priceTier: '100k-300k',
+    price: 220000,
+    status: 'available',
+    fengShuiNote: 'Đuôi 168 Nhất Lộc Phát dễ nhớ, chi phí siêu hợp lý',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0339420586',
+    phoneNumber: '0339.420.586',
+    rawDigits: '0339420586',
+    prefix: '033',
+    category: 'Số đẹp dễ nhớ',
+    priceTier: '100k-300k',
+    price: 180000,
+    status: 'available',
+    fengShuiNote: 'Đuôi 586 Sinh Phát Lộc nhịp điệu đọc mượt mà',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0375601239',
+    phoneNumber: '0375.601.239',
+    rawDigits: '0375601239',
+    prefix: '037',
+    category: 'Thần tài',
+    priceTier: '100k-300k',
+    price: 270000,
+    status: 'available',
+    fengShuiNote: 'Số tiến nhẹ kèm đuôi Thần Tài 39 mang lại may mắn hàng ngày',
+    featured: false,
+    source: 'warehouse'
+  },
+
+  // 2. Phân khúc 500k - 1 triệu (6 số tiêu biểu)
+  {
+    id: 'sim_0985411998',
+    phoneNumber: '0985.411.998',
+    rawDigits: '0985411998',
+    prefix: '098',
+    category: 'Năm sinh',
+    priceTier: '500k-1m',
+    price: 690000,
+    status: 'available',
+    fengShuiNote: 'Đầu số cổ 098 kết hợp năm sinh 1998 Mậu Dần cực đẹp',
+    featured: true,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0973628368',
+    phoneNumber: '0973.628.368',
+    rawDigits: '0973628368',
+    prefix: '097',
+    category: 'Lộc phát',
+    priceTier: '500k-1m',
+    price: 850000,
+    status: 'available',
+    fengShuiNote: 'Cụm Tài Lộc Phát 368 gắn trên đầu 097 cổ uy tín',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0868152345',
+    phoneNumber: '0868.152.345',
+    rawDigits: '0868152345',
+    prefix: '086',
+    category: 'Tiến lên',
+    priceTier: '500k-1m',
+    price: 950000,
+    status: 'available',
+    fengShuiNote: 'Đầu 086 Phát Lộc đi kèm sảnh tiến 2345 thăng tiến vững vàng',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0964191995',
+    phoneNumber: '0964.191.995',
+    rawDigits: '0964191995',
+    prefix: '096',
+    category: 'Năm sinh',
+    priceTier: '500k-1m',
+    price: 750000,
+    status: 'available',
+    fengShuiNote: 'SIM năm sinh 1995 Ất Hợi mang năng lượng bình an, công việc hanh thông',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0862740686',
+    phoneNumber: '0862.740.686',
+    rawDigits: '0862740686',
+    prefix: '086',
+    category: 'Gánh đảo',
+    priceTier: '500k-1m',
+    price: 990000,
+    status: 'available',
+    fengShuiNote: 'Gánh Lộc Phát 686 cân đối hai đầu, hợp kinh doanh online',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0982610789',
+    phoneNumber: '0982.610.789',
+    rawDigits: '0982610789',
+    prefix: '098',
+    category: 'Tiến lên',
+    priceTier: '500k-1m',
+    price: 890000,
+    status: 'available',
+    fengShuiNote: 'Tam tiến 789 San Bằng Tất Cả trên đầu 098 danh giá',
+    featured: false,
+    source: 'warehouse'
+  },
+
+  // 3. Phân khúc 1 triệu - 5 triệu (6 số tiêu biểu)
+  {
+    id: 'sim_0986526868',
+    phoneNumber: '0986.526.868',
+    rawDigits: '0986526868',
+    prefix: '098',
+    category: 'Lộc phát',
+    priceTier: '1m-5m',
+    price: 3800000,
+    status: 'available',
+    fengShuiNote: 'Cặp Lộc Phát kép 6868 trên đầu số cổ 0986 cực hiếm ở tầm giá dưới 4 triệu',
+    featured: true,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0869345678',
+    phoneNumber: '0869.345.678',
+    rawDigits: '0869345678',
+    prefix: '086',
+    category: 'Tiến lên',
+    priceTier: '1m-5m',
+    price: 4500000,
+    status: 'available',
+    fengShuiNote: 'Sảnh tiến 6 số 345678 đại cát, tượng trưng bước nhảy vọt sự nghiệp',
+    featured: true,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0978123555',
+    phoneNumber: '0978.123.555',
+    rawDigits: '0978123555',
+    prefix: '097',
+    category: 'Tam hoa',
+    priceTier: '1m-5m',
+    price: 2900000,
+    status: 'available',
+    fengShuiNote: 'Tiến 123 kết hợp Tam Hoa 555 sinh phúc, hợp người mệnh Thổ & Kim',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0967887979',
+    phoneNumber: '0967.887.979',
+    rawDigits: '0967887979',
+    prefix: '096',
+    category: 'Thần tài',
+    priceTier: '1m-5m',
+    price: 4200000,
+    status: 'available',
+    fengShuiNote: 'Thần Tài lớn kép 7979 giữ tiền bạc vững bền, đắc lộc thương trường',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0866919333',
+    phoneNumber: '0866.919.333',
+    rawDigits: '0866919333',
+    prefix: '086',
+    category: 'Tam hoa',
+    priceTier: '1m-5m',
+    price: 2450000,
+    status: 'available',
+    fengShuiNote: 'Kép 0866 đầu gánh 919 và Tam hoa 333 chắc chắn, tạo ấn tượng mạnh',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0984776886',
+    phoneNumber: '0984.776.886',
+    rawDigits: '0984776886',
+    prefix: '098',
+    category: 'Gánh đảo',
+    priceTier: '1m-5m',
+    price: 1850000,
+    status: 'available',
+    fengShuiNote: 'Gánh đảo 6886 cân xứng, hỗ trợ giữ tài lộc cho chủ doanh nghiệp nhỏ',
+    featured: false,
+    source: 'warehouse'
+  },
+
+  // 4. Phân khúc 5 triệu - 10 triệu (6 số tiêu biểu)
+  {
+    id: 'sim_0988626888',
+    phoneNumber: '0988.626.888',
+    rawDigits: '0988626888',
+    prefix: '098',
+    category: 'Tam hoa',
+    priceTier: '5m-10m',
+    price: 8900000,
+    status: 'available',
+    fengShuiNote: 'Đầu 0988 Phát Phát kèm gánh 626 và Tam Hoa 888 Đại Phát đỉnh cao',
+    featured: true,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0868868999',
+    phoneNumber: '0868.868.999',
+    rawDigits: '0868868999',
+    prefix: '086',
+    category: 'Tam hoa',
+    priceTier: '5m-10m',
+    price: 9600000,
+    status: 'available',
+    fengShuiNote: 'Tam hoa 999 Cửu Đỉnh trường tồn trên thế số gánh 868 cực đẳng cấp',
+    featured: true,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0976896789',
+    phoneNumber: '0976.896.789',
+    rawDigits: '0976896789',
+    prefix: '097',
+    category: 'Tiến lên',
+    priceTier: '5m-10m',
+    price: 7500000,
+    status: 'available',
+    fengShuiNote: 'Sảnh tiến vàng 6789 San Bằng Tất Cả không dính số 4, 7 xấu',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0968686666',
+    phoneNumber: '0968.686.666',
+    rawDigits: '0968686666',
+    prefix: '096',
+    category: 'Tứ quý',
+    priceTier: '5m-10m',
+    price: 9800000,
+    status: 'available',
+    fengShuiNote: 'Tứ quý 6666 Toàn Lộc kết hợp cụm 686 đại cát tài',
+    featured: true,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0983556789',
+    phoneNumber: '0983.556.789',
+    rawDigits: '0983556789',
+    prefix: '098',
+    category: 'Tiến lên',
+    priceTier: '5m-10m',
+    price: 6800000,
+    status: 'available',
+    fengShuiNote: 'Sảnh 56789 năm số liên tiếp tăng trưởng vượt bậc',
+    featured: false,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0865999686',
+    phoneNumber: '0865.999.686',
+    rawDigits: '0865999686',
+    prefix: '086',
+    category: 'Lộc phát',
+    priceTier: '5m-10m',
+    price: 6200000,
+    status: 'available',
+    fengShuiNote: 'Tam hoa giữa 999 kết thúc gánh Lộc Phát 686 sang trọng',
+    featured: false,
+    source: 'warehouse'
+  },
+
+  // 5. Phân khúc SIM VIP trên 10 triệu (6 số tiêu biểu)
+  {
+    id: 'sim_0989888888',
+    phoneNumber: '0989.888.888',
+    rawDigits: '0989888888',
+    prefix: '098',
+    category: 'Tứ quý',
+    priceTier: 'vip-10m+',
+    price: 128000000,
+    status: 'available',
+    fengShuiNote: 'Lục quý 888888 độc bản siêu phẩm dành cho Chủ tịch & Tập đoàn lớn',
+    featured: true,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0988688888',
+    phoneNumber: '0988.688.888',
+    rawDigits: '0988688888',
+    prefix: '098',
+    category: 'Tứ quý',
+    priceTier: 'vip-10m+',
+    price: 68000000,
+    status: 'available',
+    fengShuiNote: 'Ngũ quý 88888 Lộc Phát trên đầu 0988 cổ nguyên bản Viettel',
+    featured: true,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0868999999',
+    phoneNumber: '0868.999.999',
+    rawDigits: '0868999999',
+    prefix: '086',
+    category: 'Tứ quý',
+    priceTier: 'vip-10m+',
+    price: 95000000,
+    status: 'available',
+    fengShuiNote: 'Lục quý 999999 kết hợp đầu 0868 Phát Lộc uy nghi tuyệt đối',
+    featured: true,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0979686868',
+    phoneNumber: '0979.686.868',
+    rawDigits: '0979686868',
+    prefix: '097',
+    category: 'Lộc phát',
+    priceTier: 'vip-10m+',
+    price: 36000000,
+    status: 'available',
+    fengShuiNote: 'Tam Lộc Phát 686868 nguyên khối chuẩn phong thủy giới đầu tư',
+    featured: true,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0986688999',
+    phoneNumber: '0986.688.999',
+    rawDigits: '0986688999',
+    prefix: '098',
+    category: 'Tam hoa',
+    priceTier: 'vip-10m+',
+    price: 22500000,
+    status: 'available',
+    fengShuiNote: 'Thế số Đại Phát 688.999 hội tụ Tài Lộc và Trường Thọ',
+    featured: true,
+    source: 'warehouse'
+  },
+  {
+    id: 'sim_0966567899',
+    phoneNumber: '0966.567.899',
+    rawDigits: '0966567899',
+    prefix: '096',
+    category: 'Tiến lên',
+    priceTier: 'vip-10m+',
+    price: 16500000,
+    status: 'available',
+    fengShuiNote: 'Sảnh tiến 56789 kèm kép 99 kết thúc viên mãn',
+    featured: true,
+    source: 'warehouse'
+  }
+];

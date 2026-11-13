@@ -1,0 +1,286 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net: Deny all reads and writes by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Primitive Helpers ---
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isVerified() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        request.auth.token.email == 'nguyenduylam894@gmail.com'
+      );
+    }
+
+    // --- Entity Validation Blueprints ---
+    function isValidSim(data) {
+      return data.keys().hasAll([
+        'id', 'phoneNumber', 'rawDigits', 'prefix', 'category',
+        'priceTier', 'price', 'status', 'fengShuiNote', 'featured',
+        'source', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'id', 'phoneNumber', 'rawDigits', 'prefix', 'category',
+        'priceTier', 'price', 'status', 'fengShuiNote', 'featured',
+        'source', 'createdAt', 'updatedAt'
+      ])
+      && isValidId(data.id)
+      && data.phoneNumber is string && data.phoneNumber.size() >= 10 && data.phoneNumber.size() <= 20
+      && data.rawDigits is string && data.rawDigits.size() >= 10 && data.rawDigits.size() <= 12 && data.rawDigits.matches('^[0-9]+$')
+      && data.prefix is string && data.prefix.size() >= 3 && data.prefix.size() <= 4
+      && data.category is string && data.category.size() >= 2 && data.category.size() <= 50
+      && data.priceTier in ['100k-300k', '500k-1m', '1m-5m', '5m-10m', 'vip-10m+']
+      && data.price is number && data.price >= 50000 && data.price <= 5000000000
+      && data.status in ['available', 'reserved', 'sold']
+      && data.fengShuiNote is string && data.fengShuiNote.size() <= 240
+      && data.featured is bool
+      && data.source in ['warehouse', 'viettel_api']
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidOrder(data) {
+      return data.keys().hasAll([
+        'id', 'orderCode', 'customerName', 'customerPhone', 'zaloOptIn',
+        'shippingAddress', 'simType', 'simNumbers', 'totalAmount',
+        'tierBreakdown', 'paymentMethod', 'paymentStatus', 'orderStatus',
+        'vnpayTxnRef', 'vnpayBankCode', 'zaloNotifiedCount', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'id', 'orderCode', 'customerName', 'customerPhone', 'zaloOptIn',
+        'shippingAddress', 'simType', 'simNumbers', 'totalAmount',
+        'tierBreakdown', 'paymentMethod', 'paymentStatus', 'orderStatus',
+        'vnpayTxnRef', 'vnpayBankCode', 'zaloNotifiedCount', 'createdAt', 'updatedAt'
+      ])
+      && isValidId(data.id)
+      && isValidId(data.orderCode)
+      && data.orderCode.size() >= 4 && data.orderCode.size() <= 40
+      && data.customerName is string && data.customerName.size() >= 2 && data.customerName.size() <= 100
+      && data.customerPhone is string && data.customerPhone.size() >= 9 && data.customerPhone.size() <= 15
+      && data.zaloOptIn is bool
+      && data.shippingAddress is string && data.shippingAddress.size() >= 3 && data.shippingAddress.size() <= 300
+      && data.simType in ['physical', 'esim']
+      && data.simNumbers is list && data.simNumbers.size() >= 1 && data.simNumbers.size() <= 10 && data.simNumbers[0] is string
+      && data.totalAmount is number && data.totalAmount >= 50000 && data.totalAmount <= 10000000000
+      && data.tierBreakdown is string && data.tierBreakdown.size() >= 1 && data.tierBreakdown.size() <= 100
+      && data.paymentMethod in ['vnpay', 'cod']
+      && data.paymentStatus in ['unpaid', 'paid', 'failed']
+      && data.orderStatus in ['pending', 'confirmed', 'shipping', 'completed', 'cancelled']
+      && data.vnpayTxnRef is string && data.vnpayTxnRef.size() <= 64
+      && data.vnpayBankCode is string && data.vnpayBankCode.size() <= 32
+      && data.zaloNotifiedCount is number && data.zaloNotifiedCount >= 0 && data.zaloNotifiedCount <= 100
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidOrderTracking(data) {
+      return data.keys().hasAll([
+        'orderCode', 'maskedPhone', 'simNumbers', 'totalAmount',
+        'paymentMethod', 'paymentStatus', 'orderStatus',
+        'zaloNotifiedCount', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'orderCode', 'maskedPhone', 'simNumbers', 'totalAmount',
+        'paymentMethod', 'paymentStatus', 'orderStatus',
+        'zaloNotifiedCount', 'createdAt', 'updatedAt'
+      ])
+      && isValidId(data.orderCode)
+      && data.orderCode.size() >= 4 && data.orderCode.size() <= 40
+      && data.maskedPhone is string && data.maskedPhone.size() >= 4 && data.maskedPhone.size() <= 20
+      && data.simNumbers is list && data.simNumbers.size() >= 1 && data.simNumbers.size() <= 10 && data.simNumbers[0] is string
+      && data.totalAmount is number && data.totalAmount >= 50000 && data.totalAmount <= 10000000000
+      && data.paymentMethod in ['vnpay', 'cod']
+      && data.paymentStatus in ['unpaid', 'paid', 'failed']
+      && data.orderStatus in ['pending', 'confirmed', 'shipping', 'completed', 'cancelled']
+      && data.zaloNotifiedCount is number && data.zaloNotifiedCount >= 0 && data.zaloNotifiedCount <= 100
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidPublicCms(data) {
+      return data.keys().hasAll([
+        'heroTitle', 'heroSubtitle', 'promoBanner', 'seoTitle',
+        'seoDescription', 'hotline', 'zaloOaId', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'heroTitle', 'heroSubtitle', 'promoBanner', 'seoTitle',
+        'seoDescription', 'hotline', 'zaloOaId', 'updatedAt'
+      ])
+      && data.heroTitle is string && data.heroTitle.size() >= 3 && data.heroTitle.size() <= 160
+      && data.heroSubtitle is string && data.heroSubtitle.size() >= 3 && data.heroSubtitle.size() <= 320
+      && data.promoBanner is string && data.promoBanner.size() <= 200
+      && data.seoTitle is string && data.seoTitle.size() >= 3 && data.seoTitle.size() <= 120
+      && data.seoDescription is string && data.seoDescription.size() >= 3 && data.seoDescription.size() <= 260
+      && data.hotline is string && data.hotline.size() >= 4 && data.hotline.size() <= 30
+      && data.zaloOaId is string && data.zaloOaId.size() <= 64
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidIntegrations(data) {
+      return data.keys().hasAll([
+        'mode', 'vnpayTmnCode', 'vnpayHashSecret', 'vnpayUrl',
+        'zaloOaAccessToken', 'zaloZnsTemplateId', 'viettelApiUrl',
+        'viettelApiKey', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'mode', 'vnpayTmnCode', 'vnpayHashSecret', 'vnpayUrl',
+        'zaloOaAccessToken', 'zaloZnsTemplateId', 'viettelApiUrl',
+        'viettelApiKey', 'updatedAt'
+      ])
+      && data.mode in ['sandbox', 'production']
+      && data.vnpayTmnCode is string && data.vnpayTmnCode.size() <= 64
+      && data.vnpayHashSecret is string && data.vnpayHashSecret.size() <= 128
+      && data.vnpayUrl is string && data.vnpayUrl.size() <= 240
+      && data.zaloOaAccessToken is string && data.zaloOaAccessToken.size() <= 512
+      && data.zaloZnsTemplateId is string && data.zaloZnsTemplateId.size() <= 64
+      && data.viettelApiUrl is string && data.viettelApiUrl.size() <= 240
+      && data.viettelApiKey is string && data.viettelApiKey.size() <= 256
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidZaloLog(data) {
+      return data.keys().hasAll([
+        'id', 'orderCode', 'recipientPhone', 'eventType',
+        'messagePreview', 'deliveryStatus', 'createdAt'
+      ])
+      && data.keys().hasOnly([
+        'id', 'orderCode', 'recipientPhone', 'eventType',
+        'messagePreview', 'deliveryStatus', 'createdAt'
+      ])
+      && isValidId(data.id)
+      && data.orderCode is string && data.orderCode.size() >= 4 && data.orderCode.size() <= 40
+      && data.recipientPhone is string && data.recipientPhone.size() >= 4 && data.recipientPhone.size() <= 20
+      && data.eventType is string && data.eventType.size() >= 2 && data.eventType.size() <= 40
+      && data.messagePreview is string && data.messagePreview.size() >= 2 && data.messagePreview.size() <= 500
+      && data.deliveryStatus in ['sent_live', 'simulated_sandbox', 'failed']
+      && data.createdAt is timestamp;
+    }
+
+    function isValidAdmin(data) {
+      return data.keys().hasAll(['uid', 'email', 'role', 'createdAt'])
+      && data.keys().hasOnly(['uid', 'email', 'role', 'createdAt'])
+      && isValidId(data.uid)
+      && data.email is string && data.email.size() >= 3 && data.email.size() <= 160
+      && data.role in ['super_admin', 'editor']
+      && data.createdAt is timestamp;
+    }
+
+    // --- Collection Rules ---
+
+    // Connection test probe
+    match /test/{docId} {
+      allow get: if isValidId(docId);
+    }
+
+    // SIM Catalog: Publicly readable, Admin-managed + atomic customer reservation on checkout
+    match /sims/{simId} {
+      allow get: if isValidId(simId);
+      allow list: if true;
+      allow create: if isAdmin() && isValidId(simId) && isValidSim(incoming())
+        && incoming().id == simId
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(simId) && isValidSim(incoming())
+        && incoming().id == existing().id
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          isAdmin() ||
+          (
+            existing().status == 'available'
+            && incoming().status == 'reserved'
+            && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt'])
+          )
+        );
+      allow delete: if isAdmin() && isValidId(simId);
+    }
+
+    // Customer Orders (PII Isolated to Admins)
+    match /orders/{orderId} {
+      allow get: if isAdmin() && isValidId(orderId);
+      allow list: if isAdmin();
+      allow create: if isValidId(orderId) && isValidOrder(incoming())
+        && incoming().id == orderId
+        && incoming().orderStatus == 'pending'
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(orderId) && isValidOrder(incoming())
+        && incoming().id == existing().id
+        && incoming().orderCode == existing().orderCode
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time;
+      allow delete: if isAdmin() && isValidId(orderId);
+    }
+
+    // Public Order Status Tracking (No PII, exact get only)
+    match /order_tracking/{orderCode} {
+      allow get: if isValidId(orderCode);
+      allow create: if isValidId(orderCode) && isValidOrderTracking(incoming())
+        && incoming().orderCode == orderCode
+        && incoming().orderStatus == 'pending'
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(orderCode) && isValidOrderTracking(incoming())
+        && incoming().orderCode == existing().orderCode
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time;
+      allow delete: if isAdmin() && isValidId(orderCode);
+    }
+
+    // CMS Settings (Split public vs sensitive integration keys)
+    match /cms_settings/{settingId} {
+      allow get: if (settingId == 'public') || (settingId == 'integrations' && isAdmin());
+      allow create: if isAdmin() && isValidId(settingId)
+        && ((settingId == 'public' && isValidPublicCms(incoming())) || (settingId == 'integrations' && isValidIntegrations(incoming())))
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(settingId)
+        && ((settingId == 'public' && isValidPublicCms(incoming())) || (settingId == 'integrations' && isValidIntegrations(incoming())))
+        && incoming().updatedAt == request.time;
+    }
+
+    // Zalo OA Audit Logs
+    match /zalo_logs/{logId} {
+      allow get: if isAdmin() && isValidId(logId);
+      allow list: if isAdmin();
+      allow create: if isValidId(logId) && isValidZaloLog(incoming())
+        && incoming().id == logId
+        && incoming().createdAt == request.time;
+      allow delete: if isAdmin() && isValidId(logId);
+    }
+
+    // Admin Users Directory
+    match /admins/{uid} {
+      allow get: if isSignedIn() && isValidId(uid) && (request.auth.uid == uid || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(uid) && isValidAdmin(incoming())
+        && incoming().uid == uid
+        && incoming().createdAt == request.time;
+      allow update: if isAdmin() && isValidId(uid) && isValidAdmin(incoming())
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt;
+      allow delete: if isAdmin() && isValidId(uid);
+    }
+  }
+}
