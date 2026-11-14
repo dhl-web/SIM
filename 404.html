@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>V-Sim Hub – Đang chuyển hướng</title>
+    <script>
+      (function () {
+        var path = window.location.pathname || '';
+        var search = window.location.search || '';
+        var base = path.replace(/\/(admin|vnpay-return)\/?$/, '/');
+        if (path.indexOf('/admin') !== -1) {
+          window.location.replace(base + '#/admin');
+        } else if (path.indexOf('/vnpay-return') !== -1) {
+          window.location.replace(base + '#/vnpay-return' + search);
+        } else {
+          window.location.replace('./');
+        }
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
